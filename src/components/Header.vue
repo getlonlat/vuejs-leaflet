@@ -18,7 +18,7 @@
         <a
           role="button"
           class="navbar-burger burger"
-          :class="{'is-active' : toggleMenu}"
+          :class="{ 'is-active': toggleMenu }"
           aria-label="menu"
           aria-expanded="false"
           data-target="navbarMenu"
@@ -30,7 +30,11 @@
         </a>
       </div>
 
-      <div id="navbarMenu" class="navbar-menu" :class="{'is-active' : toggleMenu}">
+      <div
+        id="navbarMenu"
+        class="navbar-menu"
+        :class="{ 'is-active': toggleMenu }"
+      >
         <div class="navbar-end">
           <a
             class="navbar-item"
@@ -52,5 +56,5 @@ export default {
       toggleMenu: false
     };
   }
-}
+};
 </script>

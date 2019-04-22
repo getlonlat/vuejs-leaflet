@@ -31,7 +31,7 @@
         {{ address.display_name }}
       </span>
     </a>
-    <div class="panel-block" v-if="addressHistory.length == 0">
+    <div class="panel-block" v-if="addressHistory.length === 0">
       <small>
         Select some address to show here.
       </small>
@@ -58,9 +58,7 @@ export default {
     addressHistory() {
       return this.$store.getters.addressHistory.filter(item => {
         return (
-          item.display_name
-            .toLowerCase()
-            .indexOf(this.query.toLowerCase()) > -1
+          item.display_name.toLowerCase().indexOf(this.query.toLowerCase()) > -1
         );
       });
     }

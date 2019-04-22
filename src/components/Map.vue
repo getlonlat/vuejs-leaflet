@@ -156,7 +156,7 @@
 </template>
 
 <script>
-import { Icon } from "leaflet";
+import L, { Icon } from "leaflet";
 import { LMap, LTileLayer, LMarker } from "vue2-leaflet";
 var geohash = require("ngeohash");
 
@@ -232,7 +232,10 @@ export default {
       this.$store.dispatch("setLatLng", this.center);
     },
     dragEnd(evt) {
-      const latLng = { lat: evt.target._latlng.lat, lng: evt.target._latlng.lng };
+      const latLng = {
+        lat: evt.target._latlng.lat,
+        lng: evt.target._latlng.lng
+      };
       this.$store.dispatch("setLatLng", latLng);
     },
     toggleSearchAddress() {

@@ -70,17 +70,14 @@ const actions = {
     commit("SET_LATLNG", latLng);
 
     const params = {
-      key: process.env.VUE_APP_MAPS_API_KEY,
-      latlng: `${latLng.lat},${latLng.lng}`,
-      sensor: false
+      lat: latLng.lat,
+      lon: latLng.lng,
+      format: "json"
     };
     axios
-      .get("https://maps.googleapis.com/maps/api/geocode/json", { params })
+      .get("https://nominatim.openstreetmap.org/reverse", { params })
       .then(result => {
-        if (result.data.results[0]) {
-          const address = result.data.results[0].formatted_address;
-          commit("SET_ADDRESS", address);
-        }
+        commit("SET_ADDRESS", result.data.display_name);
       });
   },
   toggleSearchAddress({ commit }) {
