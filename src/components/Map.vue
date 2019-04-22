@@ -1,14 +1,22 @@
 <template xmlns:v-clipboard="http://www.w3.org/1999/xhtml">
   <div class="card">
-    <div class="card-image">
-      <gmap-map ref="gmap" class="map" :center="mapCenter" :zoom="zoom">
-        <gmap-marker
-          :position="markerPosition"
-          :clickable="true"
+    <div class="card-image" style="height: 420px">
+      <l-map
+        ref="lmap"
+        :zoom="zoom"
+        :center="mapCenter"
+        :options="mapOptions"
+        style="height: 100%; width: 100%"
+        @update:zoom="zoomUpdate"
+        @update:center="centerUpdate"
+      >
+        <l-tile-layer :url="url" :attribution="attribution" />
+        <l-marker
+          :lat-lng="mapCenter"
           :draggable="true"
           @dragend="dragEnd"
-        />
-      </gmap-map>
+        ></l-marker>
+      </l-map>
     </div>
 
     <div class="card-content">
@@ -148,13 +156,36 @@
 </template>
 
 <script>
+import { Icon } from "leaflet";
+import { LMap, LTileLayer, LMarker } from "vue2-leaflet";
 var geohash = require("ngeohash");
+
+delete Icon.Default.prototype._getIconUrl;
+Icon.Default.mergeOptions({
+  iconRetinaUrl: require("leaflet/dist/images/marker-icon-2x.png"),
+  iconUrl: require("leaflet/dist/images/marker-icon.png"),
+  shadowUrl: require("leaflet/dist/images/marker-shadow.png")
+});
 
 export default {
   data() {
     return {
-      map: null
+      url: "http://{s}.tile.osm.org/{z}/{x}/{y}.png",
+      attribution:
+        '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
+      center: null,
+      currentZoom: 11.5,
+      currentCenter: L.latLng(47.41322, -1.219482),
+      showParagraph: false,
+      mapOptions: {
+        zoomSnap: 0.5
+      }
     };
+  },
+  components: {
+    LMap,
+    LTileLayer,
+    LMarker
   },
   computed: {
     zoom() {
@@ -174,6 +205,13 @@ export default {
     }
   },
   methods: {
+    zoomUpdate(zoom) {
+      this.currentZoom = zoom;
+      this.$store.dispatch("setZoom", zoom);
+    },
+    centerUpdate(center) {
+      this.center = center;
+    },
     updatePosition() {
       navigator.geolocation.getCurrentPosition(
         position => {
@@ -191,19 +229,10 @@ export default {
       );
     },
     dropMarker() {
-      if (!this.map) {
-        return;
-      }
-
-      const center = this.map.getCenter();
-      const latLng = {
-        lat: center.lat(),
-        lng: center.lng()
-      };
-      this.$store.dispatch("setLatLng", latLng);
+      this.$store.dispatch("setLatLng", this.center);
     },
     dragEnd(evt) {
-      const latLng = { lat: evt.latLng.lat(), lng: evt.latLng.lng() };
+      const latLng = { lat: evt.target._latlng.lat, lng: evt.target._latlng.lng };
       this.$store.dispatch("setLatLng", latLng);
     },
     toggleSearchAddress() {
@@ -212,24 +241,6 @@ export default {
     clipboardSuccessHandler() {
       this.$toasted.show("Copied to clipboard.");
     }
-  },
-  mounted() {
-    var self = this;
-    self.$refs.gmap.$mapPromise.then(() => {
-      self.map = self.$refs.gmap.$mapObject;
-    });
   }
 };
 </script>
-
-<style>
-.map {
-  width: 100%;
-  height: 420px;
-}
-@media (max-width: 600px) {
-  .map {
-    height: 250px;
-  }
-}
-</style>

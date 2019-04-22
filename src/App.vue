@@ -41,3 +41,14 @@ export default {
   }
 };
 </script>
+
+<style lang="scss">
+.leaflet-fake-icon-image-2x {
+  background-image: url(../node_modules/leaflet/dist/images/marker-icon-2x.png);
+}
+.leaflet-fake-icon-shadow {
+  background-image: url(../node_modules/leaflet/dist/images/marker-shadow.png);
+}
+@import "../node_modules/leaflet/dist/leaflet.css";
+@import "~bulma/bulma.sass";
+</style>

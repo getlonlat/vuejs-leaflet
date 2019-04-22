@@ -24,7 +24,7 @@
           :key="address.place_id"
           @click="selectAddress(address)"
         >
-          {{ address.formatted_address }}
+          {{ address.display_name }}
         </a>
         <div class="panel-block" v-if="addresses.length > 0">
           <button
@@ -67,24 +67,24 @@ export default {
       }
 
       const params = {
-        address: this.query,
-        sensor: false,
-        key: process.env.VUE_APP_MAPS_API_KEY
+        q: this.query,
+        format: "json"
       };
 
       this.timer = setTimeout(() => {
+        const url = `https://nominatim.openstreetmap.org/search`;
         axios
-          .get(`https://maps.googleapis.com/maps/api/geocode/json`, { params })
+          .get(url, { params })
           .then(result => result.data)
           .then(result => {
-            this.addresses = result.results;
+            this.addresses = result;
           });
       }, 500);
     },
     selectAddress(address) {
       const latLng = {
-        lat: address.geometry.location.lat,
-        lng: address.geometry.location.lng
+        lat: address.lat,
+        lng: address.lon
       };
       this.$store.dispatch("setZoom", 15);
       this.$store.dispatch("setLatLng", latLng);

@@ -28,7 +28,7 @@
         <i class="delete" aria-hidden="true"></i>
       </span>
       <span>
-        {{ address.formatted_address }}
+        {{ address.display_name }}
       </span>
     </a>
     <div class="panel-block" v-if="addressHistory.length == 0">
@@ -58,7 +58,7 @@ export default {
     addressHistory() {
       return this.$store.getters.addressHistory.filter(item => {
         return (
-          item.formatted_address
+          item.display_name
             .toLowerCase()
             .indexOf(this.query.toLowerCase()) > -1
         );
@@ -68,15 +68,15 @@ export default {
   methods: {
     selectAddress(address) {
       const latLng = {
-        lat: address.geometry.location.lat,
-        lng: address.geometry.location.lng
+        lat: address.lat,
+        lng: address.lon
       };
       this.$store.dispatch("setLatLng", latLng);
     },
     deleteAddress(address) {
       this.$swal({
         title: "Remove this address?",
-        text: address.formatted_address,
+        text: address.display_name,
         showCancelButton: true,
         confirmButtonText: "Yes",
         cancelButtonText: "Cancel"
