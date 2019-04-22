@@ -223,8 +223,11 @@ export default {
           this.$store.dispatch("setZoom", 15);
         },
         error => {
-          console.error(error);
-          // TODO: handle geolocation errors
+          this.$swal.fire({
+            title: "Ops...",
+            text: error.message,
+            type: "error"
+          });
         }
       );
     },
