@@ -21,7 +21,6 @@
     "vue": "^2.6.10",
     "vue-sweetalert2": "^1.6.4",
     "vue-toasted": "^1.1.26",
-    "vue2-google-maps": "^0.10.6",
     "vue2-leaflet": "^2.1.0",
     "vuex": "^3.0.1",
     "vuex-persist": "^2.0.0"
