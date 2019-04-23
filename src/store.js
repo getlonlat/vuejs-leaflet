@@ -13,27 +13,19 @@ const vuexPersist = new VuexPersist({
 const state = {
   zoom: 4,
   address: null,
+  precision: 6,
   latLng: { lat: -8, lng: -55 },
   addresses: [],
   showSearchAddress: false
 };
 
 const getters = {
-  zoom: state => {
-    return state.zoom;
-  },
-  address: state => {
-    return state.address;
-  },
-  latLng: state => {
-    return state.latLng;
-  },
-  showSearchAddress: state => {
-    return state.showSearchAddress;
-  },
-  addressHistory: state => {
-    return state.addresses;
-  }
+  zoom: state => state.zoom,
+  address: state => state.address,
+  latLng: state => state.latLng,
+  center: state => state.center,
+  showSearchAddress: state => state.showSearchAddress,
+  addressHistory: state => state.addresses
 };
 
 const mutations = {
@@ -46,6 +38,9 @@ const mutations = {
   SET_LATLNG(state, latLng) {
     state.latLng = latLng;
   },
+  SET_CENTER_MAP(state, center) {
+    state.center = center;
+  },
   TOGGLE_SEARCH_ADDRESS(state) {
     state.showSearchAddress = !state.showSearchAddress;
   },
@@ -54,7 +49,7 @@ const mutations = {
   },
   DELETE_FROM_HISTORY(state, address) {
     state.addresses = state.addresses.filter(addrezz => {
-      return addrezz.place_id != address.place_id;
+      return addrezz.place_id !== address.place_id;
     });
   },
   CLEAR_SEARCH_HISTORY(state) {
@@ -79,6 +74,9 @@ const actions = {
       .then(result => {
         commit("SET_ADDRESS", result.data.display_name);
       });
+  },
+  setCenterMap({ commit }, center) {
+    commit("SET_CENTER_MAP", center);
   },
   toggleSearchAddress({ commit }) {
     commit("TOGGLE_SEARCH_ADDRESS");

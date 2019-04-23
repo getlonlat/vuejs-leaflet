@@ -38,10 +38,13 @@
         <div class="navbar-end">
           <a
             class="navbar-item"
-            href="https://github.com/getlonlat/vuejs"
+            href="https://github.com/getlonlat/vuejs-leaflet"
             target="_blank"
           >
-            about
+            <span class="icon">
+              <i class="fab fa-github"></i>
+            </span>
+            <span>code</span>
           </a>
         </div>
       </div>
